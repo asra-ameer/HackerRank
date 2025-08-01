@@ -17,14 +17,14 @@ class VendingMachine:
     # Implement the VendingMachine here
     pass
 
-if __name__ == '__main__':
+if__name__ == '__main__':
     fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
     num_items, item_coins = map(int, input().split())
     machine = VendingMachine(num_items, item_coins)
 
     n = int(input())
-    for _ in range(n):
+    for_ in range(n):
         num_items, num_coins = map(int, input().split())
         try:
             change = machine.buy(num_items, num_coins)
