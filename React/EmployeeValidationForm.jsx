@@ -7,13 +7,14 @@ function EmployeeValidationForm() {
   const[employeeId, setEmployeeId]=useState("");
   const[joiningDate, setJoiningDate]=useState("");
 
-  const [nameError,setNameError]=useState("");
-  const [emailError,setEmailError]=useState("");
-  const [employeeIdError,setEmployeeIdError]=useState("");
-  const [joiningDateError,setJoiningDateError]=useState("");
+  const [nameError,setNameError]=useState("Name must be at least 4 characters long and only contain letters and spaces");
+  const [emailError,setEmailError]=useState("Email must be a valid email address");
+  const [employeeIdError,setEmployeeIdError]=useState("Employee ID must be exactly 6 digits");
+  const [joiningDateError,setJoiningDateError]=useState("Joining Date cannot be in the future");
   
 
 const handleNameChange=(e)=>{
+  
   const value=e.target.value;
   setName(value);
   const nameRegex=/^[A-Za-z\s]+$/;
@@ -33,15 +34,17 @@ const handleEmailChange=(e)=>{
   }else{
     setEmailError("Email must be a valid email address");
   }
-}
+};
 const handleEmployeeIdChange=(e)=>{
   const value=e.target.value;
   setEmployeeId(value);
-  if(value.length==6){
-    setEmployeeIdError("");
-  }else{
-    setEmployeeIdError("Employee ID must be exactly 6 digits");
-  }
+const employeeIdRegex = /^\d{6}$/;
+if(employeeIdRegex.test(value)){
+  setEmployeeIdError("");
+}else{
+  setEmployeeIdError("Employee ID must be exactly 6 digits");
+}
+
 }
 const handelJoiningDateChange=(e)=>{
   const value=e.target.value;
@@ -55,23 +58,26 @@ const handelJoiningDateChange=(e)=>{
     setJoiningDateError("Joining Date cannot be in the future");
   }
 }
-const isFormVaild=name && email&& employeeId && joiningDate&& !nameError&& !emailError && !joiningDateError&& !employeeIdError;
+const isFormValid = name && email&& employeeId && joiningDate&& !nameError&& !emailError && !joiningDateError&& !employeeIdError;
 const handleSubmit=(e)=>{
  e.preventDefault();
-if(!isFormVaild)return;
+
+if(!isFormValid)return;
+
 setName("");
 setEmail("");
 setEmployeeId("");
 setJoiningDate("");
- setNameError("");
-  setEmailError("");
-    setEmployeeIdError("");
-    setJoiningDateError("");
+setNameError("Name must be at least 4 characters long and only contain letters and spaces");
+setEmailError("Email must be a valid email address");
+setEmployeeIdError("Employee ID must be exactly 6 digits");
+setJoiningDateError("Joining Date cannot be in the future");
+
 }
 
   return (
     <div className="layout-column align-items-center mt-20 ">
-     <form onChange={handleSubmit} className="w-50">
+     <form onSubmit={handleSubmit} className="w-50">
       <div className="layout-column align-items-start mb-10 " data-testid="input-name">
       
         <input
@@ -84,7 +90,7 @@ setJoiningDate("");
           data-testid="input-name-test"
         />
         {nameError && (
-          <p data-testid="error-message" className="text-red-500 mt-2 ">
+          <p data-testid="error-message" className="text-red-500 mt-2" >
             {nameError}
           </p>
         )}
@@ -123,15 +129,14 @@ setJoiningDate("");
         />
         {/* <p className="error mt-2">Joining Date cannot be in the future</p> */}
       </div>
-      </form>
-    
-      <button 
+        <button 
         data-testid="submit-btn" 
         type="submit"
-        disabled={!isFormVaild}
+        disabled={!isFormValid}
         className="submit-btn">
         Submit
       </button>
+      </form>
     </div>
   );
 }
